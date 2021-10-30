@@ -3,5 +3,5 @@ section .text
 
 ; DUMMY CODE	
 	room:
-		mov rax, 3
+		mov rax, 23
 		ret
