@@ -1,4 +1,5 @@
 #include <iostream>
+//#include "player.asm"
 
 extern "C" long player(long = 0);
 //extern "C" int room();

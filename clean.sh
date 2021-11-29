@@ -1,1 +1,1 @@
-rm player.o room.o main.o run
+rm player.o main.o run
