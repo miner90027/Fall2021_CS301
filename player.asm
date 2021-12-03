@@ -1,23 +1,34 @@
 section .text
 	global getHealth
 	global getInventory
+	global setInventory
 
 	getHealth:
-		
 		mov rax, [playerPtr]
-		jmp end
+		;mov rax, rcx
+		ret
 		
 	getInventory:
+		mov rax, QWORD[inventoryPtr + 8*rdi]
+		ret
 		
-		mov rax, [inventoryPtr + 8*rdi]
-		jmp end
+	setInventory:
+		mov [inventoryPtr + 8*rdi], rsi
+		mov rax, 0
+		ret
 		
-		end:
-			ret
+		
+	
 			
 section .data
 playerPtr:
-	dd 100							; offset 0 Health
+	dq 100	; Health
+	;dd 1      ; Attack
 
 inventoryPtr:
 	dq 0,0,0,0,0
+
+	
+enemyPtr:
+	dd 50    ; Health
+	dd 1     ; Attack
