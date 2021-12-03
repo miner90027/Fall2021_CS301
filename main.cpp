@@ -1,8 +1,8 @@
 #include <iostream>
 
 extern "C" long getHealth(void);
-extern "C" long* getInventory(int n=0);
-extern "C" void setInventory(int i = 0, int x = 0);
+extern "C" long* getInventory(int);
+extern "C" void setInventory(int, int);
 
 
 int main(){

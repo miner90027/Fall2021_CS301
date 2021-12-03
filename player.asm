@@ -13,7 +13,7 @@ section .text
 		ret
 		
 	setInventory:
-		mov [inventoryPtr + 8*rdi], rsi
+		mov QWORD[inventoryPtr + 8*rdi], rsi
 		mov rax, 0
 		ret
 		
@@ -24,11 +24,11 @@ section .data
 playerPtr:
 	dq 100	; Health
 	;dd 1      ; Attack
+	
+enemyPtr:
+	dq 50    ; Health
+	dq 1     ; Attack
 
 inventoryPtr:
 	dq 0,0,0,0,0
 
-	
-enemyPtr:
-	dd 50    ; Health
-	dd 1     ; Attack
