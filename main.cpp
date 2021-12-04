@@ -1,25 +1,26 @@
 #include <iostream>
+using std::cout;
 
 extern "C" long getHealth(void);
-extern "C" long* getInventory(int);
-extern "C" void setInventory(int, int);
+extern "C" int inventoryPtr[];
 
 
 int main(){
 	
-	std::cout << "Player health: " << getHealth() << std::endl;
+	cout << "Player health: " << getHealth() << std::endl;
 	
 	for(int i = 0; i< 5; ++i){
-			setInventory(i,i);
+			inventoryPtr[i] = i;
 	}
 	
 	std::cout << "Inventory: " ;
 	
 	for(int i = 0; i < 5; ++i){
-			std::cout << getInventory(i) << " | ";
+			cout << inventoryPtr[i];
+			cout << " | ";
 	}
 	
-	std::cout << std::endl;
+	cout << std::endl;
 	
 	
 	return 0;
