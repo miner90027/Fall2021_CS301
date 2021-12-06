@@ -1,9 +1,10 @@
 section .text
 	global getHealth
 	global inventoryPtr
-	global playerPtr
 	global attack
 	global useItem
+	global resetEnemy
+	global enemyPtr
 	
 	getHealth:
 		mov rax, QWORD[playerPtr +8*0]
@@ -15,8 +16,8 @@ section .text
 	
 	resetEnemy:
 		xor rax, rax
-		mov QWORD[enemyPtr+8*0], 50
-		mov QWORD[enemyPtr+8*1], 1
+		mov QWORD[enemyPtr+8*0], rdi
+		mov QWORD[enemyPtr+8*1], rsi
 		ret
 		
 	useItem:							;receives int/long as input to determine index in mem

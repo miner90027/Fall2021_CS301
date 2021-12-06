@@ -6,14 +6,16 @@ using std::endl;
 
 
 extern "C" long getHealth(void);
-extern "C" long playerPtr[];
 extern "C" long inventoryPtr[];
 extern "C" long attack(long);
 extern "C" long useItem(long);
+extern "C" void resetEnemy(long, long);
+extern "C" long enemyPtr[];
 
 void printItems(long n);
 void printInventory(void);
-long dropItem(void);
+void newEnemy(long n);
+long numGen(void);
 
 int main(){
 	
@@ -43,6 +45,9 @@ int main(){
 	
 	//cout << "Generating random num between 0 - 4: " << dropItem() << endl;
 	*/
+	newEnemy(4);
+	cout << "Enemy stats:\nHealth: "<< enemyPtr[0]<< "\nAttack: " << enemyPtr[1] << endl;
+	
 	return 0;
 }
 
@@ -58,7 +63,7 @@ void printInventory(){
 	cout << std::endl;
 }
 
-long dropItem(){
+long numGen(){
 	std::srand(std::time(nullptr)); 
 	
 	long randNum = std::rand()/((RAND_MAX + 1u)/4);
@@ -86,3 +91,22 @@ void printItems(long n){
 	}
 }
 
+void newEnemy(long n){
+	switch (n) {
+	case 1:
+		cout << "A slime appears!" << endl;
+		resetEnemy(50,1);
+		break;
+	case 2:
+		cout << "A goblin appears!" << endl;
+		resetEnemy(100,10);
+		break;
+	case 3:
+		cout << "An Orc appears!" << endl;
+		resetEnemy(150,25);
+		break;
+	default:
+		cout << "No enemyies appear." << endl;
+		break;
+	}
+}
