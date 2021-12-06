@@ -11,25 +11,9 @@ extern "C" long inventoryPtr[];
 extern "C" long attack(long);
 extern "C" long useItem(long);
 
-
-void printInventory(){
-	std::cout << "Inventory: " ;
-	
-	for(int i = 0; i < 5; ++i){
-			cout << inventoryPtr[i];
-			cout << " | ";
-	}
-	
-	cout << std::endl;
-}
-
-int dropItem(){
-	std::srand(std::time(nullptr)); 
-	
-	int randNum = std::rand()/((RAND_MAX + 1u)/4);
-	
-	return randNum;
-}
+void printItems(long n);
+void printInventory(void);
+long dropItem(void);
 
 int main(){
 	
@@ -40,7 +24,7 @@ int main(){
 	}
 
 	printInventory();
-	
+	/*
 	cout << "Please enter the slot number 0 - 4 for the item you wish to use: " << endl;
 	
 	long in;
@@ -48,7 +32,9 @@ int main(){
 	
 	
 	cout << "Using item in slot " << in << " returns: " << useItem(in) << endl;
-	cout << "Item in slot" << in << ": " << inventoryPtr[in] << endl;
+	cout << "Item in slot" << in << ": ";
+	printItems(inventoryPtr[in]);
+	cout << endl;
 	
 	printInventory();
 	
@@ -56,6 +42,47 @@ int main(){
 	
 	
 	//cout << "Generating random num between 0 - 4: " << dropItem() << endl;
-	
+	*/
 	return 0;
 }
+
+
+void printInventory(){
+	std::cout << "Inventory: " ;
+	
+	for(long i = 0; i < 5; ++i){
+			printItems(inventoryPtr[i]);
+			cout << " | ";
+	}
+	
+	cout << std::endl;
+}
+
+long dropItem(){
+	std::srand(std::time(nullptr)); 
+	
+	long randNum = std::rand()/((RAND_MAX + 1u)/4);
+	
+	return randNum;
+}
+
+void printItems(long n){
+	switch (n) {
+	case 1:
+		cout << "Potion";
+		break;
+	case 2:
+		cout << "Sword";
+		break;
+	case 3:
+		cout << "Dagger";
+		break;
+	case 4:
+		cout << "Bottle";
+		break;
+	default:
+		cout << "Nothing";
+		break;
+	}
+}
+
