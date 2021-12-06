@@ -7,9 +7,9 @@ using std::endl;
 
 extern "C" long getHealth(void);
 extern "C" long playerPtr[];
-extern "C" int inventoryPtr[];
-extern "C" int attack(int);
-extern "C" int useItem(int);
+extern "C" long inventoryPtr[];
+extern "C" long attack(long);
+extern "C" long useItem(long);
 
 
 void printInventory(){
@@ -24,7 +24,7 @@ void printInventory(){
 }
 
 int dropItem(){
-	;std::srand(std::time(nullptr)); 
+	std::srand(std::time(nullptr)); 
 	
 	int randNum = std::rand()/((RAND_MAX + 1u)/4);
 	
@@ -40,7 +40,7 @@ int main(){
 	}
 
 	printInventory();
-	/*
+	
 	cout << "Please enter the slot number 0 - 4 for the item you wish to use: " << endl;
 	
 	long in;
@@ -51,11 +51,11 @@ int main(){
 	cout << "Item in slot" << in << ": " << inventoryPtr[in] << endl;
 	
 	printInventory();
-	*/
+	
 	cout << "Player attack enemy. Enemy health remaining: " << attack(0) << endl;
 	
 	
-	cout << "Generating random num between 0 - 4: " << dropItem() << endl;
+	//cout << "Generating random num between 0 - 4: " << dropItem() << endl;
 	
 	return 0;
 }
