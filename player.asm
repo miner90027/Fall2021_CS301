@@ -19,20 +19,23 @@ section .text
 		mov QWORD[enemyPtr+8*1], 1
 		ret
 		
-	useItem:
-		xor rax, rax
+	useItem:							;receives int/long as input to determine index in mem
+		xor rax, rax				;reset registers
 		xor rcx, rcx
-		cmp rdi, 0
+		
+		cmp rdi, 0					;Verify valid index - works
 		jl .invalid
 		cmp rdi, 5
 		jge .invalid
 		
-		mov rcx, QWORD[inventoryPtr +4* rdi]
-		;mov rax, rcx
+		;mov rcx, rdi
+		
+		mov rcx, QWORD[inventoryPtr +4* rdi]		;store value @ index into register
+		;mov rax, rcx			;tests to verify that geting correct value from array
 		;ret
 		
-		cmp rcx, 1
-		je .potion
+		cmp rcx, 1				;compare value in mem to possible values & jmp to code
+		je .potion				;none of the cmps ever = true
 		cmp rcx, 2
 		je .sword
 		cmp rcx, 3
@@ -43,7 +46,7 @@ section .text
 		
 		.potion:
 			mov QWORD[playerPtr +8*0], 100
-			mov QWORD[inventoryPtr +8* rdi], 4
+			mov QWORD[inventoryPtr +4* rdi], 4
 			mov rax, rcx
 			ret
 			
@@ -62,7 +65,7 @@ section .text
 			jne .used
 			add QWORD[playerPtr +8*0], 10
 				.used:
-			mov QWORD[inventoryPtr +8* rdi], 0
+			mov QWORD[inventoryPtr +4* rdi], 0
 			mov rax, rcx
 			ret
 			
