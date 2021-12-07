@@ -4,22 +4,23 @@ section .text
 	global attack
 	global useItem
 	global resetEnemy
-	global enemyPtr
-	
+	global enemyHealth
+	global receiveItem
+
 	getHealth:
 		mov rax, QWORD[playerPtr +8*0]
 		ret
-		
+
 	enemyHealth:
 		mov rax, QWORD[enemyPtr +8*0]
 		ret
-	
+
 	resetEnemy:
 		xor rax, rax
 		mov QWORD[enemyPtr+8*0], rdi
 		mov QWORD[enemyPtr+8*1], rsi
 		ret
-		
+
 	useItem:							;receives int/long as input to determine index in mem
 		xor rax, rax				;reset registers
 		xor rcx, rcx
@@ -31,12 +32,10 @@ section .text
 		
 		;mov rcx, rdi
 		
-		mov rcx, QWORD[inventoryPtr +8* rdi]		;store value @ index into register
-		;mov rax, rcx			;tests to verify that geting correct value from array
-		;ret
+		mov rcx, QWORD[inventoryPtr +8* rdi]
 		
-		cmp rcx, 1				;compare value in mem to possible values & jmp to code
-		je .potion				;none of the cmps ever = true
+		cmp rcx, 1
+		je .potion
 		cmp rcx, 2
 		je .sword
 		cmp rcx, 3
@@ -73,8 +72,8 @@ section .text
 		.invalid:
 			mov rax, -1
 			ret
-	
-	attack:
+
+		attack:
 		cmp rdi, 0
 		jne .hitPlayer
 		
@@ -95,6 +94,36 @@ section .text
 			.end:
 				xor rax, rax
 				ret
+
+	receiveItem:
+	xor rax, rax
+	mov rax, -1
+	xor rcx, rcx
+	
+	.loop:
+		mov rdx, QWORD[inventoryPtr +8*rcx]
+		cmp rdx, 0
+		je .checkVal
+		
+		add rcx, 1
+		cmp rcx, 5
+		jl .loop
+	
+	.checkVal:
+		cmp rdi, 1
+		je .store
+		cmp rdi, 2
+		je .store
+		cmp rdi, 3
+		je .store
+		
+		mov rax, 1
+		ret
+	
+	.store:
+		mov QWORD[inventoryPtr +8*rcx], rdi
+		xor rax, rax
+		ret
 	
 section .data
 playerPtr:

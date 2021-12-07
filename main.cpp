@@ -10,57 +10,35 @@ extern "C" long inventoryPtr[];
 extern "C" long attack(long);
 extern "C" long useItem(long);
 extern "C" void resetEnemy(long, long);
-extern "C" long enemyPtr[];
+extern "C" long enemyHealth(void);
+extern "C" long receiveItem(long);
 
 void printItems(long n);
 void printInventory(void);
-void newEnemy(long n);
+void newEnemy(void);
 long numGen(void);
+void prompt(int n);
+void dropItem(void);
 
 int main(){
 	
-	cout << "Player health: " << getHealth() << std::endl;
-	
-	for(int i = 0; i< 5; ++i){
-			inventoryPtr[i] = i;
-	}
-
+	prompt(1);
+	cout << "ReceiveItem returns: " << receiveItem(2) << endl;
 	printInventory();
-	/*
-	cout << "Please enter the slot number 0 - 4 for the item you wish to use: " << endl;
-	
-	long in;
-	std::cin >> in;
-	
-	
-	cout << "Using item in slot " << in << " returns: " << useItem(in) << endl;
-	cout << "Item in slot" << in << ": ";
-	printItems(inventoryPtr[in]);
-	cout << endl;
-	
-	printInventory();
-	
-	cout << "Player attack enemy. Enemy health remaining: " << attack(0) << endl;
-	
-	
-	//cout << "Generating random num between 0 - 4: " << dropItem() << endl;
-	*/
-	newEnemy(4);
-	cout << "Enemy stats:\nHealth: "<< enemyPtr[0]<< "\nAttack: " << enemyPtr[1] << endl;
 	
 	return 0;
 }
 
 
 void printInventory(){
-	std::cout << "Inventory: " ;
+	cout << "Inventory: " ;
 	
 	for(long i = 0; i < 5; ++i){
 			printItems(inventoryPtr[i]);
 			cout << " | ";
 	}
 	
-	cout << std::endl;
+	cout <<endl;
 }
 
 long numGen(){
@@ -91,7 +69,8 @@ void printItems(long n){
 	}
 }
 
-void newEnemy(long n){
+void newEnemy(){
+	long n = numGen();
 	switch (n) {
 	case 1:
 		cout << "A slime appears!" << endl;
@@ -110,3 +89,12 @@ void newEnemy(long n){
 		break;
 	}
 }
+
+void prompt(int n){
+	switch (n){
+	case 1:
+		cout << "Player health: " << getHealth() << endl;
+		break;
+	}
+}
+
