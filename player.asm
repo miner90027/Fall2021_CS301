@@ -92,22 +92,15 @@ section .text
 		jne .hitPlayer
 		
 		.hitEnemy:
-			mov rcx, [playerPtr+8*1]
-			sub [enemyPtr+8*0], rcx
-			cmp QWORD[enemyPtr+8*0], 0
-			jle .end
-			jmp enemyHealth
+			mov rax, [playerPtr+8*1]
+			sub [enemyPtr+8*0], rax
+			ret
 		
 		.hitPlayer:
-			mov rcx, [enemyPtr+8*1]
-			sub [playerPtr+8*0], rcx
-			cmp QWORD[playerPtr+8*0], 0
-			jle .end
-			jmp getHealth
-			
-			.end:
-				xor rax, rax
-				ret
+			mov rax, [enemyPtr+8*1]
+			sub [playerPtr+8*0], rax
+			ret
+
 
 	receiveItem:
 	xor rax, rax

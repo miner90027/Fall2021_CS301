@@ -64,11 +64,15 @@ int main(){
 				
 				useItem(slot);
 				
+				cout << "You used the ";
+				printItems(inventoryPtr[slot]);
+				cout << "." << endl;
+				
 				if(enemyHealth() <= 0) continue;
 				break;
 				}
 			case 2:
-				attack(0);
+				cout << "You attack the enemy dealing " << attack(0) << " damage." << endl;
 				if(enemyHealth() <= 0){
 					cout << "You defeated the enemy!" << endl;
 					gainXP();
@@ -82,8 +86,8 @@ int main(){
 		}
 		
 		if(enemyHealth() > 0){
-			cout << endl << "The enemy attacks you!" << endl;
-			attack(1);
+			cout << endl << "The enemy attacks you! You take "<< attack(1) << " damage!" << endl;
+			//attack(1);
 		}
 		else{
 		cout << endl;
@@ -94,9 +98,9 @@ int main(){
 	
 	std::system("clear");
 	prompt(1);
-	cout << "\n\n\nYou Died!\nGame Over" << endl;
+	cout << "\n\n\t\t\tYou Died!\n\t\t\tGame Over" << endl;
 	
-	cout << "Score: " << score() << endl;
+	cout << "\n\n\n\t\t\tScore: " << score() << endl;
 	
 	return 0;
 }
