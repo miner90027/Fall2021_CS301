@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdio>
 #include <cstdlib>
 #include <ctime>
 using std::cout;
@@ -23,7 +24,15 @@ void dropItem(void);
 int main(){
 	
 	prompt(1);
-	cout << "ReceiveItem returns: " << receiveItem(2) << endl;
+	
+	for(int i = 0; i < 5; ++i){
+		inventoryPtr[i] = 4;
+	}
+	
+	printInventory();
+	cout << endl;
+	dropItem();
+	cout << endl;
 	printInventory();
 	
 	return 0;
@@ -97,4 +106,77 @@ void prompt(int n){
 		break;
 	}
 }
+
+void dropItem(){
+	long item = numGen();
+	cout << "The enemy dropped ";
+	
+	if(item < 1 || item > 4){
+		printItems(item);
+		cout << endl;
+		return;
+	}
+	
+	cout << "a ";
+	printItems(item); 
+	cout << "!" << endl;
+	
+	char keep;
+	
+	do{
+		cout << "Would you like to keep the ";
+		printItems(item);
+		cout << "? (Y/N)" << endl;
+		keep = std::getchar();
+		
+	}while(keep != 'y' && keep != 'Y' && 
+					keep != 'n' && keep != 'N');
+					
+	if(keep == 'n' || keep == 'N') return;
+	
+	long full = receiveItem(item);
+	if(full != -1) return;
+	
+	keep = '\0';
+	
+	do{
+		printInventory();
+		cout << endl << endl << "You don't have enough room to keep the ";
+		printItems(item);
+		cout << ".\nDo you wish to replace an item in your inentory? (Y/N)" << endl;
+		keep = std::getchar();
+		
+	}while(keep != 'y' && keep != 'Y' && 
+					keep != 'n' && keep != 'N');
+	
+	if(keep == 'n' || keep == 'N') return;
+	
+	long slot = -2;
+	do{
+	cout << "Which item do you wish to replace?\nPlease enter the number for the slot containing the item, or enter -1 to cancel." << endl;
+	printInventory();
+	cout << "\tSlot 0 | Slot 1| Slot 2 | Slot 3 | Slot 4 |" << endl;
+	std::cin >> slot;
+	
+	}while(slot < -1 && slot >= 5);
+	
+	inventoryPtr[slot] = 0;
+	receiveItem(item);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

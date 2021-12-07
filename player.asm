@@ -108,6 +108,7 @@ section .text
 		add rcx, 1
 		cmp rcx, 5
 		jl .loop
+		ret
 	
 	.checkVal:
 		cmp rdi, 1
