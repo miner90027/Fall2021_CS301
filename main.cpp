@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include <cstdio>
 #include <cstdlib>
 #include <ctime>
@@ -11,7 +12,7 @@ extern "C" long inventoryPtr[];
 extern "C" long attack(long);
 extern "C" long useItem(long);
 extern "C" void resetEnemy(long, long);
-extern "C" long enemyHealth(void);
+extern "C" long & enemyHealth(void);
 extern "C" long receiveItem(long);
 
 void printItems(long n);
@@ -20,22 +21,81 @@ void newEnemy(void);
 long numGen(void);
 void prompt(int n);
 void dropItem(void);
+long action(void);
 
 int main(){
 	
+	receiveItem(numGen());
+	
+	do{
+		std::system("clear");
+		prompt(1);
+		printInventory();
+		cout << endl;
+		
+		if(enemyHealth() <= 0) 
+			newEnemy();
+		
+		prompt(2);
+		cout << endl << endl;
+		
+		switch (action()){
+			case 1:
+			{
+				cout << endl << endl;
+				
+				long slot = -2;
+				do{
+				cout << "Which item do you wish to use?\nPlease enter the number for the slot containing the item, or enter -1 to cancel." << endl;
+				printInventory();
+				cout << "\tSlot 0 | Slot 1| Slot 2 | Slot 3 | Slot 4 |" << endl;
+				std::cin >> slot;
+				
+				}while(slot < -1 && slot >= 5);
+				if(slot == -1) continue;
+				
+				useItem(slot);
+				
+				if(enemyHealth() <= 0) continue;
+				break;
+				}
+			case 2:
+				attack(0);
+				break;
+			default:
+				enemyHealth() = 0;
+				dropItem();
+				continue;
+		}
+		
+		if(enemyHealth() > 0){
+			cout << endl << "The enemy attacks you!" << endl;
+			attack(1);
+		}
+		else{
+		cout << endl;
+			dropItem();
+		}
+		
+	}while(getHealth() > 0);
+	
+	std::system("clear");
 	prompt(1);
-	
-	for(int i = 0; i < 5; ++i){
-		inventoryPtr[i] = 4;
-	}
-	
-	printInventory();
-	cout << endl;
-	dropItem();
-	cout << endl;
-	printInventory();
+	cout << "\n\n\nYou Died!\nGame Over" << endl;
 	
 	return 0;
+}
+
+long action(){
+	long act = -1;
+	
+	do{
+			cout << "What action would you like to take?\nEnter the number associated with the action you wish to take.\n"
+							"0: Run Away / Continue Journey\n1: Use an Item or Equip Weapon\n2: Attack" << endl;
+			std::cin >> act;
+	}while (act < 0 && act >= 3);
+
+	return act;
 }
 
 
@@ -95,6 +155,7 @@ void newEnemy(){
 		break;
 	default:
 		cout << "No enemyies appear." << endl;
+		resetEnemy(0,0);
 		break;
 	}
 }
@@ -102,14 +163,17 @@ void newEnemy(){
 void prompt(int n){
 	switch (n){
 	case 1:
-		cout << "Player health: " << getHealth() << endl;
+		cout << "Player Health: " << getHealth() << endl;
+		break;
+	case 2:
+		cout << "Enemy Health: " << enemyHealth() << endl;
 		break;
 	}
 }
 
 void dropItem(){
 	long item = numGen();
-	cout << "The enemy dropped ";
+	cout << "You found ";
 	
 	if(item < 1 || item > 4){
 		printItems(item);
@@ -163,13 +227,6 @@ void dropItem(){
 	inventoryPtr[slot] = 0;
 	receiveItem(item);
 }
-
-
-
-
-
-
-
 
 
 

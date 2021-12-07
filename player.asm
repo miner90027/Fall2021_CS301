@@ -12,7 +12,7 @@ section .text
 		ret
 
 	enemyHealth:
-		mov rax, QWORD[enemyPtr +8*0]
+		mov rax, enemyPtr
 		ret
 
 	resetEnemy:
@@ -62,7 +62,7 @@ section .text
 		
 		.bottle:
 			cmp QWORD[playerPtr +8*0], 100
-			jne .used
+			je .used
 			add QWORD[playerPtr +8*0], 10
 				.used:
 			mov QWORD[inventoryPtr +8* rdi], 0
@@ -129,10 +129,10 @@ section .text
 section .data
 playerPtr:
 	dq 100	; Health
-	dq 1      ; Attack
+	dq 5      ; Attack
 	
 enemyPtr:
-	dq 50    ; Health
+	dq 0    ; Health
 	dq 1     ; Attack
 
 inventoryPtr:
