@@ -6,7 +6,20 @@ section .text
 	global resetEnemy
 	global enemyHealth
 	global receiveItem
+	global score
+	global gainXP
 
+	score:
+		mov rax, QWORD[playerPtr +8*2]
+		ret
+	
+	gainXP:
+		xor rax, rax
+		mov rdx, QWORD[enemyPtr+8*2]
+		add QWORD[playerPtr +8*2], rdx
+		ret
+	
+	
 	getHealth:
 		mov rax, QWORD[playerPtr +8*0]
 		ret
@@ -19,6 +32,7 @@ section .text
 		xor rax, rax
 		mov QWORD[enemyPtr+8*0], rdi
 		mov QWORD[enemyPtr+8*1], rsi
+		mov QWORD[enemyPtr+8*2], rdx
 		ret
 
 	useItem:							;receives int/long as input to determine index in mem
@@ -129,16 +143,14 @@ section .text
 section .data
 playerPtr:
 	dq 100	; Health
-	dq 5      ; Attack
+	dq 5		; Attack
+	dq 0		; Score
 	
 enemyPtr:
-	dq 0    ; Health
-	dq 1     ; Attack
+	dq 0		; Health
+	dq 0		; Attack
+	dq 0		; XP drop amount
 
 inventoryPtr:
-	dq 0
-	dq 0
-	dq 0
-	dq 0
-	dq 0
+	dq 0,0,0,0,0
 

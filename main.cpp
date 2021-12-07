@@ -2,7 +2,8 @@
 #include <string>
 #include <cstdio>
 #include <cstdlib>
-#include <ctime>
+#include <chrono>
+#include <thread>
 using std::cout;
 using std::endl;
 
@@ -11,9 +12,11 @@ extern "C" long getHealth(void);
 extern "C" long inventoryPtr[];
 extern "C" long attack(long);
 extern "C" long useItem(long);
-extern "C" void resetEnemy(long, long);
+extern "C" void resetEnemy(long, long, long);
 extern "C" long & enemyHealth(void);
 extern "C" long receiveItem(long);
+extern "C" long score(void);
+extern "C" void gainXP(void);
 
 void printItems(long n);
 void printInventory(void);
@@ -28,6 +31,7 @@ int main(){
 	receiveItem(numGen());
 	
 	do{
+		std::this_thread::sleep_for (std::chrono::seconds(2));
 		std::system("clear");
 		prompt(1);
 		printInventory();
@@ -40,13 +44,17 @@ int main(){
 		cout << endl << endl;
 		
 		switch (action()){
+			case 0:
+				enemyHealth() = 0;
+				break;
 			case 1:
 			{
 				cout << endl << endl;
 				
 				long slot = -2;
 				do{
-				cout << "Which item do you wish to use?\nPlease enter the number for the slot containing the item, or enter -1 to cancel." << endl;
+				cout << "Which item do you wish to use?\n"
+				"Please enter the number for the slot containing the item, or enter -1 to cancel." << endl;
 				printInventory();
 				cout << "\tSlot 0 | Slot 1| Slot 2 | Slot 3 | Slot 4 |" << endl;
 				std::cin >> slot;
@@ -61,10 +69,15 @@ int main(){
 				}
 			case 2:
 				attack(0);
+				if(enemyHealth() <= 0){
+					cout << "You defeated the enemy!" << endl;
+					gainXP();
+				}
 				break;
 			default:
-				enemyHealth() = 0;
-				dropItem();
+				if(enemyHealth < 0){
+					enemyHealth() = 0;
+				}
 				continue;
 		}
 		
@@ -83,6 +96,8 @@ int main(){
 	prompt(1);
 	cout << "\n\n\nYou Died!\nGame Over" << endl;
 	
+	cout << "Score: " << score() << endl;
+	
 	return 0;
 }
 
@@ -90,7 +105,8 @@ long action(){
 	long act = -1;
 	
 	do{
-			cout << "What action would you like to take?\nEnter the number associated with the action you wish to take.\n"
+			cout << "What action would you like to take?\n"
+							"Enter the number associated with the action you wish to take.\n"
 							"0: Run Away / Continue Journey\n1: Use an Item or Equip Weapon\n2: Attack" << endl;
 			std::cin >> act;
 	}while (act < 0 && act >= 3);
@@ -143,19 +159,19 @@ void newEnemy(){
 	switch (n) {
 	case 1:
 		cout << "A slime appears!" << endl;
-		resetEnemy(50,1);
+		resetEnemy(50,1, 50);
 		break;
 	case 2:
 		cout << "A goblin appears!" << endl;
-		resetEnemy(100,10);
+		resetEnemy(100,10, 100);
 		break;
 	case 3:
 		cout << "An Orc appears!" << endl;
-		resetEnemy(150,25);
+		resetEnemy(150,25, 300);
 		break;
 	default:
 		cout << "No enemyies appear." << endl;
-		resetEnemy(0,0);
+		resetEnemy(0,0,0);
 		break;
 	}
 }
