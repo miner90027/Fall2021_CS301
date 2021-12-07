@@ -25,6 +25,7 @@ long numGen(void);
 void prompt(int n);
 void dropItem(void);
 long action(void);
+long getLong(void);
 
 int main(){
 	
@@ -57,7 +58,7 @@ int main(){
 				"Please enter the number for the slot containing the item, or enter -1 to cancel." << endl;
 				printInventory();
 				cout << "\tSlot 0 | Slot 1| Slot 2 | Slot 3 | Slot 4 |" << endl;
-				std::cin >> slot;
+				slot = getLong();
 				
 				}while(slot < -1 && slot >= 5);
 				if(slot == -1) continue;
@@ -112,7 +113,7 @@ long action(){
 			cout << "What action would you like to take?\n"
 							"Enter the number associated with the action you wish to take.\n"
 							"0: Run Away / Continue Journey\n1: Use an Item or Equip Weapon\n2: Attack" << endl;
-			std::cin >> act;
+			act = getLong();
 	}while (act < 0 && act >= 3);
 
 	return act;
@@ -240,7 +241,7 @@ void dropItem(){
 	cout << "Which item do you wish to replace?\nPlease enter the number for the slot containing the item, or enter -1 to cancel." << endl;
 	printInventory();
 	cout << "\tSlot 0 | Slot 1| Slot 2 | Slot 3 | Slot 4 |" << endl;
-	std::cin >> slot;
+	slot = getLong();
 	
 	}while(slot < -1 && slot >= 5);
 	
@@ -249,6 +250,19 @@ void dropItem(){
 }
 
 
+// Take from Stack Overflow & modified for longs
+// https://stackoverflow.com/questions/9455501/c-getint-function-have-a-java-equivalent-attached
+long getLong(){
+
+	long i;
+	while (!(std::cin >> i)) {
+			cout << "Invalid input. Please enter a number." << endl;
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<long>::max(), '\n');
+	}
+
+	return i;
+}
 
 
 
