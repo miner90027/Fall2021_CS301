@@ -1,3 +1,12 @@
+/*
+ * main.cpp
+ * Aleks McCormick
+ * 2021/12/02
+ * Fall 2021 CS 301
+ * Final Project 
+ * Simple Text based RPG using asm
+ */
+ 
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
@@ -6,7 +15,9 @@
 using std::cout;
 using std::endl;
 
-
+/******************************************/
+/***        Assembly Functions          ***/
+/******************************************/
 extern "C" long getHealth(void);
 extern "C" long inventoryPtr[];
 extern "C" long attack(long);
@@ -17,6 +28,10 @@ extern "C" long receiveItem(long);
 extern "C" long score(void);
 extern "C" void gainXP(void);
 
+/******************************************/
+/***      C++ Function Prototypes       ***/
+/******************************************/
+
 void printItems(long n);
 void printInventory(void);
 void newEnemy(void);
@@ -26,12 +41,16 @@ void dropItem(void);
 long action(void);
 long getLong(void);
 
+/******************************************/
+/***            Main Program            ***/
+/******************************************/
+
 int main(){
 	
 	receiveItem(numGen());
 	
 	do{
-		//std::this_thread::sleep_for (std::chrono::seconds(2));
+	
 		std::system("clear");
 		prompt(1);
 		printInventory();
@@ -90,6 +109,7 @@ int main(){
 			default:
 				if(enemyHealth() <= 0){
 					cout << "Nothing eventful happens as you continue your journey." << endl;
+					dropItem();
 				}
 				else{
 					cout << "You recognize that you are not equiped to defeat the enemy before you.\n"
@@ -115,6 +135,11 @@ int main(){
 	
 	return 0;
 }
+
+/******************************************/
+/***      C++ Function Definitions      ***/
+/******************************************/
+
 
 long action(){
 	long act = -1;
