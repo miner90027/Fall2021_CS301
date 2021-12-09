@@ -1,3 +1,11 @@
+; player.asm
+; Aleks McCormick
+; 2021/12/02
+; Fall 2021 CS 301
+; Final Project 
+; Simple Text based RPG using asm
+; Assembly functions
+
 section .text
 	global getHealth
 	global inventoryPtr
