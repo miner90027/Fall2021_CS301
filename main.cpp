@@ -1,5 +1,4 @@
 #include <iostream>
-#include <string>
 #include <cstdio>
 #include <cstdlib>
 #include <chrono>
@@ -13,7 +12,7 @@ extern "C" long inventoryPtr[];
 extern "C" long attack(long);
 extern "C" long useItem(long);
 extern "C" void resetEnemy(long, long, long);
-extern "C" long & enemyHealth(void);
+extern "C" long enemyHealth(void);
 extern "C" long receiveItem(long);
 extern "C" long score(void);
 extern "C" void gainXP(void);
@@ -32,7 +31,7 @@ int main(){
 	receiveItem(numGen());
 	
 	do{
-		std::this_thread::sleep_for (std::chrono::seconds(2));
+		//std::this_thread::sleep_for (std::chrono::seconds(2));
 		std::system("clear");
 		prompt(1);
 		printInventory();
@@ -45,9 +44,6 @@ int main(){
 		cout << endl << endl;
 		
 		switch (action()){
-			case 0:
-				enemyHealth() = 0;
-				break;
 			case 1:
 			{
 				cout << endl << endl;
@@ -60,41 +56,55 @@ int main(){
 				cout << "\tSlot 0 | Slot 1| Slot 2 | Slot 3 | Slot 4 |" << endl;
 				slot = getLong();
 				
-				}while(slot < -1 && slot >= 5);
-				if(slot == -1) continue;
-				
-				useItem(slot);
+				}	while(!(slot >= -1 && slot < 5));
+				if(slot == -1) {
+					cout << "No items were used" << endl;
+					continue;
+				}
 				
 				cout << "You used the ";
 				printItems(inventoryPtr[slot]);
 				cout << "." << endl;
 				
+				useItem(slot);
+				
 				if(enemyHealth() <= 0) continue;
 				break;
 				}
 			case 2:
+			
+				if(enemyHealth() <= 0){
+					cout << "You encountered no enemies to attack. You continue on your way." << endl;
+					break;
+				}
+
 				cout << "You attack the enemy dealing " << attack(0) << " damage." << endl;
 				if(enemyHealth() <= 0){
 					cout << "You defeated the enemy!" << endl;
 					gainXP();
+					cout << endl;
+					dropItem();
 				}
+
 				break;
 			default:
-				if(enemyHealth < 0){
-					enemyHealth() = 0;
+				if(enemyHealth() <= 0){
+					cout << "Nothing eventful happens as you continue your journey." << endl;
 				}
+				else{
+					cout << "You recognize that you are not equiped to defeat the enemy before you.\n"
+								"You decide to flee and live to fight another day." << endl;
+				}
+				resetEnemy(0,0,0);
+				
 				continue;
 		}
 		
 		if(enemyHealth() > 0){
 			cout << endl << "The enemy attacks you! You take "<< attack(1) << " damage!" << endl;
-			//attack(1);
-		}
-		else{
-		cout << endl;
-			dropItem();
 		}
 		
+		std::this_thread::sleep_for (std::chrono::seconds(2));
 	}while(getHealth() > 0);
 	
 	std::system("clear");
@@ -114,7 +124,7 @@ long action(){
 							"Enter the number associated with the action you wish to take.\n"
 							"0: Run Away / Continue Journey\n1: Use an Item or Equip Weapon\n2: Attack" << endl;
 			act = getLong();
-	}while (act < 0 && act >= 3);
+	}while (!(act >= 0 && act < 3));
 
 	return act;
 }
@@ -206,16 +216,15 @@ void dropItem(){
 	printItems(item); 
 	cout << "!" << endl;
 	
-	char keep;
+	char keep = '\0';
 	
-	do{
+	while(keep != 'y' && keep != 'Y' && 
+					keep != 'n' && keep != 'N'){
 		cout << "Would you like to keep the ";
 		printItems(item);
 		cout << "? (Y/N)" << endl;
 		keep = std::getchar();
-		
-	}while(keep != 'y' && keep != 'Y' && 
-					keep != 'n' && keep != 'N');
+	}
 					
 	if(keep == 'n' || keep == 'N') return;
 	
@@ -224,26 +233,27 @@ void dropItem(){
 	
 	keep = '\0';
 	
-	do{
+	while(keep != 'y' && keep != 'Y' && 
+					keep != 'n' && keep != 'N'){
 		printInventory();
 		cout << endl << endl << "You don't have enough room to keep the ";
 		printItems(item);
 		cout << ".\nDo you wish to replace an item in your inentory? (Y/N)" << endl;
 		keep = std::getchar();
 		
-	}while(keep != 'y' && keep != 'Y' && 
-					keep != 'n' && keep != 'N');
+	}
 	
 	if(keep == 'n' || keep == 'N') return;
 	
 	long slot = -2;
-	do{
-	cout << "Which item do you wish to replace?\nPlease enter the number for the slot containing the item, or enter -1 to cancel." << endl;
-	printInventory();
-	cout << "\tSlot 0 | Slot 1| Slot 2 | Slot 3 | Slot 4 |" << endl;
-	slot = getLong();
+	while(slot < -1 && slot >= 5){
+		cout << "Which item do you wish to replace?\n"
+			"Please enter the number for the slot containing the item, or enter -1 to cancel." << endl;
+		printInventory();
+		cout << "\tSlot 0 | Slot 1| Slot 2 | Slot 3 | Slot 4 |" << endl;
+		slot = getLong();
 	
-	}while(slot < -1 && slot >= 5);
+	}
 	
 	inventoryPtr[slot] = 0;
 	receiveItem(item);

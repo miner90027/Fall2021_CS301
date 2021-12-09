@@ -25,7 +25,7 @@ section .text
 		ret
 
 	enemyHealth:
-		mov rax, enemyPtr
+		mov rax, QWORD[enemyPtr +8*0]
 		ret
 
 	resetEnemy:
@@ -88,6 +88,7 @@ section .text
 			ret
 
 		attack:
+		xor rax, rax
 		cmp rdi, 0
 		jne .hitPlayer
 		
