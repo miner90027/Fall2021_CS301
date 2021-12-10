@@ -273,9 +273,11 @@ void prompt(int n){
 // 	If inventory is full, then prompts user if they
 // 		wish to discard an item
 void dropItem(){
+	// generate an item
 	long item = numGen();
 	cout << "You found ";
 	
+	// Print the item that the user finds
 	if(item < 1 || item > 4){
 		printItems(item);
 		cout << endl;
@@ -288,6 +290,8 @@ void dropItem(){
 	
 	char keep = '\0';
 	
+	// Prompt the use if they wish to keep the item
+	// loop while invalid input
 	while(keep != 'y' && keep != 'Y' && 
 					keep != 'n' && keep != 'N'){
 		cout << "Would you like to keep the ";
@@ -295,14 +299,19 @@ void dropItem(){
 		cout << "? (Y/N)" << endl;
 		keep = std::getchar();
 	}
-					
+	
+	// If user decides no, then exit function
 	if(keep == 'n' || keep == 'N') return;
 	
-	long full = receiveItem(item);
-	if(full != -1) return;
+	// store the item 
+	// checking if the inventory is full
+	// if not then exit function
+	if(receiveItem(item) != -1) return;
 	
 	keep = '\0';
 	
+	// Prompt the user if the wish to replace an item in their inventory
+	// loop while invalid input
 	while(keep != 'y' && keep != 'Y' && 
 					keep != 'n' && keep != 'N'){
 		printInventory();
@@ -313,10 +322,13 @@ void dropItem(){
 		
 	}
 	
+	// check if user decides to not replace an item
+	// if so then exit function
 	if(keep == 'n' || keep == 'N') return;
 	
-	long slot = -2;
-	while(slot < -1 && slot >= 5){
+	// Prompt user for which item they wish to replace
+	long slot = -1;
+	while(!(slot > -1 && slot < 5)){
 		cout << "Which item do you wish to replace?\n"
 			"Please enter the number for the slot containing the item, or enter -1 to cancel." << endl;
 		printInventory();
@@ -324,8 +336,10 @@ void dropItem(){
 		slot = getLong();
 	
 	}
-	
+	// set the item slot the user selects to nothing
 	inventoryPtr[slot] = 0;
+	
+	// store item in empty slot
 	receiveItem(item);
 }
 
