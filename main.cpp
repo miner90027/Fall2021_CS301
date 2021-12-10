@@ -46,28 +46,35 @@ long getLong(void);
 /******************************************/
 
 int main(){
-	
+	// start the player off with a random item
 	receiveItem(numGen());
 	
+	// loop until the player dies
 	do{
-	
+		// clear the terminal window
 		std::system("clear");
+		
+		// print out player stats
 		prompt(1);
 		printInventory();
 		cout << endl;
 		
-		if(enemyHealth() <= 0) 
-			newEnemy();
+		// generate new enemy if enemy is dead
+		if(enemyHealth() <= 0) newEnemy();
 		
-		prompt(2);
+		// print the enemy health if it is greater than 0
+		if(enemyHealth() > 0) prompt(2);
 		cout << endl << endl;
 		
+		// Prompt user for an action to take
 		switch (action()){
-			case 1:
+			case 1: // use an item
 			{
 				cout << endl << endl;
-				
 				long slot = -2;
+				
+				// prompt the user for which item they wish to use
+				// loop while invalid input
 				do{
 				cout << "Which item do you wish to use?\n"
 				"Please enter the number for the slot containing the item, or enter -1 to cancel." << endl;
@@ -76,28 +83,36 @@ int main(){
 				slot = getLong();
 				
 				}	while(!(slot >= -1 && slot < 5));
+				
+				// print out that no items were used & continue loop
 				if(slot == -1) {
 					cout << "No items were used" << endl;
 					continue;
 				}
 				
+				// print out the item used
 				cout << "You used the ";
 				printItems(inventoryPtr[slot]);
 				cout << "." << endl;
 				
+				// use the item
 				useItem(slot);
 				
-				if(enemyHealth() <= 0) continue;
 				break;
-				}
-			case 2:
+			}
+			case 2: // Attack the enemy
 			
+				// If no enemy to attack, print as such & continue through the loop
 				if(enemyHealth() <= 0){
 					cout << "You encountered no enemies to attack. You continue on your way." << endl;
 					break;
 				}
-
+				
+				// deal damage to the enemy
 				cout << "You attack the enemy dealing " << attack(0) << " damage." << endl;
+				
+				// Check if enemy is defeated
+				// if so -> print as such, gain XP, & drop an item
 				if(enemyHealth() <= 0){
 					cout << "You defeated the enemy!" << endl;
 					gainXP();
@@ -106,31 +121,43 @@ int main(){
 				}
 
 				break;
-			default:
-				if(enemyHealth() <= 0){
+			default: // Continue on your journey or flee from enemy
+				// determine if an enemy is currently being confronted
+				if(enemyHealth() <= 0){ // If not continue on your way & obtain item
 					cout << "Nothing eventful happens as you continue your journey." << endl;
 					dropItem();
 				}
-				else{
-					cout << "You recognize that you are not equiped to defeat the enemy before you.\n"
+				else{ // Flee from enemy gaining nothing
+					cout << "You recognize that you are not equipped to defeat the enemy before you.\n"
 								"You decide to flee and live to fight another day." << endl;
 				}
+				// Set all enemy values to 0 
 				resetEnemy(0,0,0);
 				
 				continue;
 		}
 		
+		// Check if enemy is still alive
+		// If so -> they attack the player
 		if(enemyHealth() > 0){
 			cout << endl << "The enemy attacks you! You take "<< attack(1) << " damage!" << endl;
 		}
 		
+		// wait period before the loop continues
+		// allows player to read all the print statements
 		std::this_thread::sleep_for (std::chrono::seconds(2));
 	}while(getHealth() > 0);
 	
+	// clear the terminal window
 	std::system("clear");
+	
+	// print out player final health
 	prompt(1);
+	
+	// print out Game Over
 	cout << "\n\n\t\t\tYou Died!\n\t\t\tGame Over" << endl;
 	
+	// Print out player score
 	cout << "\n\n\n\t\t\tScore: " << score() << endl;
 	
 	return 0;
@@ -140,7 +167,8 @@ int main(){
 /***      C++ Function Definitions      ***/
 /******************************************/
 
-
+// action()
+// Prompts the user for input and returns the input
 long action(){
 	long act = -1;
 	
@@ -154,7 +182,8 @@ long action(){
 	return act;
 }
 
-
+// printInventory()
+// Prints out the player's inventory as text
 void printInventory(){
 	cout << "Inventory: " ;
 	
@@ -166,6 +195,9 @@ void printInventory(){
 	cout <<endl;
 }
 
+// numGen
+// Generates a random number between 0 and 4
+// returns the generated number
 long numGen(){
 	std::srand(std::time(nullptr)); 
 	
@@ -174,6 +206,10 @@ long numGen(){
 	return randNum;
 }
 
+
+// printItems()
+// takes a long as input and prints the name of
+//   the item associated with the input
 void printItems(long n){
 	switch (n) {
 	case 1:
@@ -194,9 +230,11 @@ void printItems(long n){
 	}
 }
 
+// newEnemy()
+// uses numGen to determine enemy
+// Prints enemy type and assigns stats
 void newEnemy(){
-	long n = numGen();
-	switch (n) {
+	switch (numGen()) {
 	case 1:
 		cout << "A slime appears!" << endl;
 		resetEnemy(50,1, 50);
@@ -216,6 +254,8 @@ void newEnemy(){
 	}
 }
 
+// prompt()
+// takes input and prints the statement associated with it
 void prompt(int n){
 	switch (n){
 	case 1:
@@ -227,6 +267,11 @@ void prompt(int n){
 	}
 }
 
+// dropItem()
+// uses numGen() to determine the item that drops
+// 	prompts user to keep it 
+// 	If inventory is full, then prompts user if they
+// 		wish to discard an item
 void dropItem(){
 	long item = numGen();
 	cout << "You found ";
@@ -284,7 +329,8 @@ void dropItem(){
 	receiveItem(item);
 }
 
-
+// getLong()
+// Used to verify that user inputs a long
 // Take from Stack Overflow & modified for longs
 // https://stackoverflow.com/questions/9455501/c-getint-function-have-a-java-equivalent-attached
 long getLong(){
